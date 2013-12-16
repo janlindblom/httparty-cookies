@@ -24,10 +24,12 @@ module HTTParty
         response = request.perform(&block)
 
         # Read cookies from the headers.
-        response.headers.get_fields('set-cookie').each do |value|
-          uri = response.uri || response.request.uri
+        if response.headers.get_fields('set-cookie')
+          response.headers.get_fields('set-cookie').each do |value|
+            uri = response.uri || response.request.uri
 
-          @cookie_jar.parse value, uri
+            @cookie_jar.parse value, uri
+          end
         end
 
         response
